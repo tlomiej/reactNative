@@ -20,9 +20,7 @@ export default function App() {
     const data = await fetch(url)
       .then((response) => response.json())
       .then((data) => data)
-      .catch((error) => {
-        return [];
-      });
+      .catch((error) => error);
     return data;
   };
 
