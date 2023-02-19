@@ -18,7 +18,7 @@ interface NominationResult {
   class: string;
   type: string;
   osm_id: string;
-
+  address: any;
 }
 
 export default function App() {
@@ -100,8 +100,8 @@ export default function App() {
       />
 
       <Modal
-        animationType="slide"
-        transparent={true}
+        animationType="fade"
+        transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
@@ -115,6 +115,7 @@ export default function App() {
             <Text style={styles.modalText}>{selectedItem?.class}</Text>
             <Text style={styles.modalText}>{selectedItem?.type}</Text>
             <Text style={styles.modalText}>{selectedItem?.osm_id}</Text>
+            <Text style={styles.modalText}>{JSON.stringify(selectedItem?.address, null, 2) }</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
@@ -151,8 +152,8 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
+    borderRadius: 10,
+    padding: 25,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
