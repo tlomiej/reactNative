@@ -2,25 +2,23 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
-  View,
-  ScrollView,
-  Image,
   TextInput,
   Button,
-  Alert,
   FlatList,
+  SafeAreaView,
 } from "react-native";
 
 export default function App() {
-  const [textInput, setTextInput] = useState("");
-  const [items, setItems] = useState([]);
+  const [textInput, setTextInput] = useState<string>("");
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getData = async (input: string) => {
-    const url = `https://nominatim.openstreetmap.org/?addressdetails=1&q=${input}&format=json&limit=30`;
+    const url = `https://nominatim.openstreetmap.org/?addressdetails=1&q=${input}&format=json&limit=3`;
     const data = await fetch(url)
       .then((response) => response.json())
       .then((data) => data)
-      .catch((error) => error);
+      .catch(() => {return []});
     return data;
   };
 
@@ -29,16 +27,8 @@ export default function App() {
   }, [textInput]);
 
   return (
-    <ScrollView style={styles.container}>
-      <Text>Some text</Text>
-      <View>
-        <Image
-          source={{
-            uri: "https://reactnative.dev/docs/assets/p_cat2.png",
-          }}
-          style={{ width: 10, height: 20, justifyContent: "center" }}
-        />
-      </View>
+    <SafeAreaView style={{ flex: 1 }}>
+   
       <TextInput
         returnKeyType="search"
         style={{
@@ -52,12 +42,15 @@ export default function App() {
       />
       <Button
         onPress={async () => {
+          setItems([])
+          setLoading(true)
           const d = await getData(textInput);
           setItems(d);
+          setLoading(false)
         }}
         title="Search"
         color="#841584"
-        accessibilityLabel="Learn more about this purple button"
+        accessibilityLabel="Search button"
       />
       <FlatList
         data={items}
@@ -73,8 +66,15 @@ export default function App() {
             </Text>
           </Text>
         )}
+        ListHeaderComponent={() => {
+          if(loading){
+            return <Text>Loading...</Text>
+          }
+          return null
+        }
+        }
       />
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
