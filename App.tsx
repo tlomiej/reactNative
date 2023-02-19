@@ -18,7 +18,9 @@ export default function App() {
     const data = await fetch(url)
       .then((response) => response.json())
       .then((data) => data)
-      .catch(() => {return []});
+      .catch(() => {
+        return [];
+      });
     return data;
   };
 
@@ -28,7 +30,6 @@ export default function App() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-   
       <TextInput
         returnKeyType="search"
         style={{
@@ -42,11 +43,11 @@ export default function App() {
       />
       <Button
         onPress={async () => {
-          setItems([])
-          setLoading(true)
+          setItems([]);
+          setLoading(true);
           const d = await getData(textInput);
           setItems(d);
-          setLoading(false)
+          setLoading(false);
         }}
         title="Search"
         color="#841584"
@@ -67,12 +68,11 @@ export default function App() {
           </Text>
         )}
         ListHeaderComponent={() => {
-          if(loading){
-            return <Text>Loading...</Text>
+          if (loading) {
+            return <Text>Loading...</Text>;
           }
-          return null
-        }
-        }
+          return null;
+        }}
       />
     </SafeAreaView>
   );
