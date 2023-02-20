@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  Button,
-  FlatList,
-  SafeAreaView,
-  Modal,
-  View,
-  Pressable,
-} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import * as React from "react";
+import { useEffect, useState } from "react";
+
+import { Button, StyleSheet, Text, View } from "react-native";
 
 interface NominationResult {
   display_name: string;
@@ -21,12 +15,16 @@ interface NominationResult {
   address: any;
 }
 
+const Stack = createStackNavigator();
+
 export default function App() {
   const [textInput, setTextInput] = useState<string>("");
   const [items, setItems] = useState<NominationResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<NominationResult>();
+
+  const ref = React.useRef<any>(null);
 
   const getData = async (input: string) => {
     const url = `https://nominatim.openstreetmap.org/?addressdetails=1&q=${input}&format=json&limit=3`;
@@ -43,89 +41,27 @@ export default function App() {
     //Alert.alert("Use " + textInput);
   }, [textInput]);
 
+  const HomeScreen = () => {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Home Screen</Text>
+      </View>
+    );
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TextInput
-        returnKeyType="search"
-        style={{
-          height: 40,
-          borderColor: "gray",
-          borderWidth: 1,
-          justifyContent: "center",
-        }}
-        defaultValue=""
-        onChangeText={(newText) => setTextInput(newText)}
-      />
+    <View style={{ flex: 1 }}>
+      <NavigationContainer ref={ref}>
+        <Stack.Navigator initialRouteName="Empty">
+          <Stack.Screen name="Empty" component={() => <View></View>} />
+          <Stack.Screen name="Home">{() => <HomeScreen />}</Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
       <Button
-        onPress={async () => {
-          setItems([]);
-          setLoading(true);
-          const d = await getData(textInput);
-          setItems(d);
-          setLoading(false);
-        }}
-        title="Search"
-        color="#841584"
-        accessibilityLabel="Search button"
+        onPress={() => ref.current && ref.current.navigate("Home")}
+        title="Go home"
       />
-      <FlatList
-        data={items}
-        renderItem={({ item, index }) => (
-          <Text>
-            <Pressable
-              style={[styles.button, styles.buttonOpen]}
-              onPress={() => {
-                setModalVisible(true);
-                setSelectedItem(items[index]);
-              }}
-            >
-              <Text style={styles.textStyle}>Show Modal</Text>
-            </Pressable>
-            <Text style={styles.item}>
-              {`${item.display_name}`}
-              {"\n"}
-            </Text>
-            <Text style={styles.item}>
-              {`${item.lat} ${item.lon}`}
-              {"\n"}
-            </Text>
-          </Text>
-        )}
-        ListHeaderComponent={() => {
-          if (loading) {
-            return <Text>Loading...</Text>;
-          }
-          return null;
-        }}
-      />
-
-      <Modal
-        animationType="fade"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Property</Text>
-
-            <Text style={styles.modalText}>{selectedItem?.display_name}</Text>
-            <Text style={styles.modalText}>{selectedItem?.class}</Text>
-            <Text style={styles.modalText}>{selectedItem?.type}</Text>
-            <Text style={styles.modalText}>{selectedItem?.osm_id}</Text>
-            <Text style={styles.modalText}>{JSON.stringify(selectedItem?.address, null, 2) }</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-    </SafeAreaView>
+    </View>
   );
 }
 
