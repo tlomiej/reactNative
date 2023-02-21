@@ -4,6 +4,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 import { Button, StyleSheet, Text, View } from "react-native";
+import SearchElement from "./src/SearchElement";
 
 interface NominationResult {
   display_name: string;
@@ -49,21 +50,37 @@ export default function App() {
     );
   };
 
-  const Empty = () => {
-    return <View></View>;
+  const Menu = () => {
+    return (
+      <View>
+        <Button
+          onPress={() => ref.current && ref.current.navigate("Home")}
+          title="Go home"
+        />
+        <Button
+          onPress={() => ref.current && ref.current.navigate("Search")}
+          title="Search"
+        />
+      </View>
+    );
   };
 
   return (
     <View style={{ flex: 1 }}>
       <NavigationContainer ref={ref}>
-        <Stack.Navigator initialRouteName="Empty">
-          <Stack.Screen name="Empty">{() => <Empty />}</Stack.Screen>
+        <Stack.Navigator initialRouteName="Search">
+          <Stack.Screen name="Menu">{() => <Menu />}</Stack.Screen>
+          <Stack.Screen name="Search">{() => <SearchElement />}</Stack.Screen>
           <Stack.Screen name="Home">{() => <HomeScreen />}</Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
       <Button
         onPress={() => ref.current && ref.current.navigate("Home")}
         title="Go home"
+      />
+      <Button
+        onPress={() => ref.current && ref.current.navigate("Search")}
+        title="Search"
       />
     </View>
   );
