@@ -44,16 +44,20 @@ export default function App() {
   const HomeScreen = () => {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Home Screen</Text>
+        <Text>Home Screen test</Text>
       </View>
     );
+  };
+
+  const Empty = () => {
+    return <View></View>;
   };
 
   return (
     <View style={{ flex: 1 }}>
       <NavigationContainer ref={ref}>
         <Stack.Navigator initialRouteName="Empty">
-          <Stack.Screen name="Empty" component={() => <View></View>} />
+          <Stack.Screen name="Empty">{() => <Empty />}</Stack.Screen>
           <Stack.Screen name="Home">{() => <HomeScreen />}</Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
