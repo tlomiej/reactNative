@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 
 import { Button, StyleSheet, Text, View } from "react-native";
 import SearchElement from "./src/SearchElement";
+import DetailsElement from "./src/DetailsElement";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 interface NominationResult {
   display_name: string;
@@ -16,7 +18,8 @@ interface NominationResult {
   address: any;
 }
 
-const Stack = createStackNavigator();
+//const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [textInput, setTextInput] = useState<string>("");
@@ -26,6 +29,7 @@ export default function App() {
   const [selectedItem, setSelectedItem] = useState<NominationResult>();
 
   const ref = React.useRef<any>(null);
+
 
   const getData = async (input: string) => {
     const url = `https://nominatim.openstreetmap.org/?addressdetails=1&q=${input}&format=json&limit=3`;
@@ -70,7 +74,8 @@ export default function App() {
       <NavigationContainer ref={ref}>
         <Stack.Navigator initialRouteName="Search">
           <Stack.Screen name="Menu">{() => <Menu />}</Stack.Screen>
-          <Stack.Screen name="Search">{() => <SearchElement />}</Stack.Screen>
+          <Stack.Screen name="Search">{() => <SearchElement navigation={Stack.Navigator}/>}</Stack.Screen>
+          <Stack.Screen name="Details">{() => <DetailsElement />}</Stack.Screen>
           <Stack.Screen name="Home">{() => <HomeScreen />}</Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>

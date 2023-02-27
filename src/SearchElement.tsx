@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MutableRefObject, useState } from "react";
 import {
   Button,
   FlatList,
@@ -29,7 +29,7 @@ const getData = async (input: string) => {
   return data;
 };
 
-const SearchElement = () => {
+const SearchElement = (navigation: any) => {
   const [textInput, setTextInput] = useState<string>("");
   const [items, setItems] = useState<NominationResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,6 +63,10 @@ const SearchElement = () => {
         data={items}
         renderItem={({ item, index }) => (
           <Text>
+            <Button
+              onPress={() => navigation.navigate("Details")}
+              title="Details"
+            />
             <Text style={styles.item}>
               {`${item.display_name}`}
               {"\n"}
