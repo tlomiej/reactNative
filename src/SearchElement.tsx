@@ -29,7 +29,9 @@ const getData = async (input: string) => {
   return data;
 };
 
-const SearchElement = (navigation: any) => {
+
+
+const SearchElement = () => {
   const [textInput, setTextInput] = useState<string>("");
   const [items, setItems] = useState<NominationResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,7 +66,7 @@ const SearchElement = (navigation: any) => {
         renderItem={({ item, index }) => (
           <Text>
             <Button
-              onPress={() => navigation.navigate("Details")}
+              //onPress={() => navigation.navigate("Details")}
               title="Details"
             />
             <Text style={styles.item}>
