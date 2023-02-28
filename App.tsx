@@ -30,7 +30,6 @@ export default function App() {
 
   const ref = React.useRef<any>(null);
 
-
   const getData = async (input: string) => {
     const url = `https://nominatim.openstreetmap.org/?addressdetails=1&q=${input}&format=json&limit=3`;
     const data = await fetch(url)
@@ -41,6 +40,7 @@ export default function App() {
       });
     return data;
   };
+
 
   useEffect(() => {
     //Alert.alert("Use " + textInput);
@@ -74,7 +74,9 @@ export default function App() {
       <NavigationContainer ref={ref}>
         <Stack.Navigator initialRouteName="Search">
           <Stack.Screen name="Menu">{() => <Menu />}</Stack.Screen>
-          <Stack.Screen name="Search">{() => <SearchElement navigation={Stack.Navigator}/>}</Stack.Screen>
+          <Stack.Screen name="Search" options={{ headerShown: false }}>
+            {() => <SearchElement navigation={Stack.Navigator} />}
+          </Stack.Screen>
           <Stack.Screen name="Details">{() => <DetailsElement />}</Stack.Screen>
           <Stack.Screen name="Home">{() => <HomeScreen />}</Stack.Screen>
         </Stack.Navigator>
